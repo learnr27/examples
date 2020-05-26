@@ -42,3 +42,15 @@ class Test(models.Model):
     URL = models.URLField()
     UUID = models.UUIDField()
     GenericIPAddress = models.GenericIPAddressField()
+
+
+class A(models.Model):
+    onetoone = models.OneToOneField(Test, related_name='one')
+
+
+class B(models.Model):
+    foreign = models.ForeignKey(A)
+
+
+class C(models.Model):
+    manytomany = models.ManyToManyField(B)
