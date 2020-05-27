@@ -86,3 +86,16 @@ class AddressInfo(models.Model):  # coures_addressinfo
 
     def __str__(self):  # __unicode__(self)
         return self.address
+
+    class Meta:
+        # 定义元数据
+        db_table = 'address'
+        # ordering = ['pid']  # 指定按照什么字段排序
+        verbose_name = '省市县地址信息'
+        verbose_name_plural = verbose_name
+        # abstract = True
+        # permissions = (('定义好的权限', '权限说明'),)
+        # managed = False
+        unique_together = ('address', 'note')  # ((),())
+        # app_label = 'courses'
+        # db_tablespace  # 定义数据库表空间的名字
