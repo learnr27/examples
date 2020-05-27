@@ -113,6 +113,13 @@ class IndexView(View):
         # for c in courses:
         #     print(c)
 
+        # Course.objects.update(price=F('price') - 100)
+        # print(Course.objects.filter(volume__lte=F('price') * 10))
+        #
+        # print(Course.objects.filter(Q(title__icontains='java') & Q(volume__gte=5000)))
+        #
+        # print(Course.objects.filter(Q(title__icontains='golang') | Q(volume__lte=1000)))
+
         return render(request, 'address.html')
 
 
