@@ -120,7 +120,8 @@ class Teacher(models.Model):
 # 课程信息表
 class Course(models.Model):
     title = models.CharField(max_length=100, primary_key=True, db_index=True, verbose_name='课程名')
-    teacher = models.ForeignKey(Teacher, null=True, blank=True, on_delete=models.CASCADE, verbose_name='课程讲师')  # 删除级联
+    teacher = models.ForeignKey(Teacher, null=True, blank=True, on_delete=models.CASCADE, verbose_name='课程讲师',
+                                related_name='teac')  # 删除级联 related_name: Teacher.objects.get(nickname="Jack").teac.all()
     type = models.CharField(choices=((1, "实战课"), (2, "免费课"), (0, "其它")), max_length=1, default=0, verbose_name='课程类型')
     price = models.PositiveSmallIntegerField(verbose_name='价格')
     volume = models.BigIntegerField(verbose_name='销量')
@@ -175,3 +176,17 @@ class TeacherAssistant(models.Model):
 
     def __str__(self):
         return self.nickname
+
+
+class GroupConcat(models.Aggregate):
+    """自定义实现聚合功能，实现GROUP_CONCAT功能"""
+
+    function = 'GROUP_CONCAT'
+    template = '%(function)s(%(distinct)s%(expressions)s%(ordering)s%(separator)s)'
+
+    def __init__(self, expression, distinct=False, ordering=None, separator=',', **extra):
+        super(GroupConcat, self).__init__(expression,
+                                          distinct='DISTINCT ' if distinct else '',
+                                          ordering=' ORDER BY %s' % ordering if ordering is not None else '',
+                                          separator=' SEPARATOR "%s"' % separator,
+                                          output_field=models.CharField(), **extra)
